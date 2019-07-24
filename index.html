@@ -398,9 +398,9 @@
                 <el-form-item label="背景图片：（建议尺寸16:9）">
                     <el-upload
                             class="avatar-uploader"
-                            action="#"
+                            action="/images"
                             :show-file-list="false"
-                            :on-success="handleAvatarSuccess"
+                            :on-success="uploadTab"
                             :before-upload="beforeAvatarUpload">
                         <img v-if="tabDialog.imgUrl" :src="tabDialog.imgUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -815,6 +815,7 @@
                     { label: '文字tip', value: 'wordTip'},
                     { label: '联系方式、地址', value: 'location'}
                 ],
+                editingImgUrl: '',
             },
             methods: {
                 LocationDialogSubmit() {
@@ -968,6 +969,9 @@
                     if(this.tabDialog.action==='edit'){
                         const _i = this.tabDialog.editing[1]
                         this.pages[i].tabs[_i].name = this.editingContent
+                        if(this.tabDialog.imgUrl){
+                            this.pages[i].tabs[_i].bg = 'url('+this.tabDialog.imgUrl+')'
+                        }
                         this.showMsg('edit')
                     }
                     else{
@@ -996,6 +1000,9 @@
                 delTab(i,_i) {
                     this.pages[i].tabs.splice(_i,1)
                     this.showMsg('del')
+                },
+                uploadTab(res,file) {
+                    this.tabDialog.imgUrl = URL.createObjectURL(file.raw);
                 },
 
                 editTitle(i,action) {
@@ -1147,8 +1154,12 @@
                         'scrollTop': $('.wrapper').eq(val).offset().top
                     }, 350)
                 },
-                handleAvatarSuccess() {},
-                beforeAvatarUpload() {},
+                handleAvatarSuccess() {
+
+                },
+                beforeAvatarUpload() {
+
+                },
                 showMsg(type) {
                     if(type==='add') this.$message.success('添加成功！')
                     else if(type==='edit') this.$message.success('编辑成功！')
