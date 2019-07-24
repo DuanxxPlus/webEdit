@@ -329,11 +329,14 @@ h1{
 }
 .edit-tab>li{
     width: 16px;
-    height: 32px;
-    line-height: 32px;
+    height: 18px;
+    line-height: 18px;
     font-size: 14px;
     color: white;
-    margin: 0 5px;
+    margin: 7px 5px 0;
+    background: #666666;
+    border: 1px solid black;
+    border-radius: 3px;
 }
 .edit-tab>li:hover{
     color: #0F7CC5;

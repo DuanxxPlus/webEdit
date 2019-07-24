@@ -927,8 +927,11 @@
                 },
                 editTab(i,_i,action) {
                     this.tabDialog.action = action
-                    this.editingContent = this.pages[i].tabs[_i].name
-                    this.tabDialog.editing = [i,_i]
+                    if(action==='edit'){
+                        this.editingContent = this.pages[i].tabs[_i].name
+                        this.tabDialog.editing = [i,_i]
+                    }
+                    else this.tabDialog.editing = [i]
                     this.tabDialog.show = true
                 },
                 delTab(i,_i) {
