@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/cssReset.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+    <div id="container">
+        <nav>
+            <div>
+                <h1></h1>
+                <div id="nav-menu">
+                    <el-menu :default-active="defaultActive" class="el-menu-demo" mode="horizontal"
+                        @select="handleSelect" background-color="rgba(0,0,0,0.5)" text-color="#fff"
+                        active-text-color="#ffd04b">
+                        <el-menu-item index="0">首页</el-menu-item>
+                        <el-menu-item v-for="(item,index) in navMenu"
+                                      :index="index+1"
+                                      :class="{'emi': editing}">
+                            {{item}}
+                            <ul class="edit-nav" v-if="editing" @click.stop>
+                                <li @click="delNav(index)">
+                                    <el-tooltip class="item" effect="dark" content="删除" placement="right">
+                                        <svg class="icon" aria-hidden="true">
+                                            <use xlink:href="#icon-shanchu"></use>
+                                        </svg>
+                                    </el-tooltip>
+                                </li>
+                                <li @click="resetNavName(index)">
+                                    <el-tooltip class="item" effect="dark" content="重命名" placement="right">
+                                        <svg class="icon" aria-hidden="true">
+                                            <use xlink:href="#icon-edit"></use>
+                                        </svg>
+                                    </el-tooltip>
+                                </li>
+                                <!--<li @click="navSort(index)" v-show="pages.length>1">
+                                    <el-tooltip class="item" effect="dark" content="移动" placement="right">
+                                        <svg class="icon" aria-hidden="true">
+                                            <use xlink:href="#icon-move"></use>
+                                        </svg>
+                                    </el-tooltip>
+                                </li>-->
+                            </ul>
+                        </el-menu-item>
+                        <!-- <el-menu-item index="2">关于我们</el-menu-item>
+                        <el-menu-item index="3">产品介绍</el-menu-item>
+                        <el-menu-item index="4">服务</el-menu-item>
+                        <el-menu-item index="5">案例展示</el-menu-item>
+                        <el-menu-item index="6">联系我们</el-menu-item> -->
+                    </el-menu>
+                </div>
+                <el-button class="nav-edit" @click="edit" :type="editing?'':'primary'" size="small">
+                    {{editing?'退出编辑':'编辑'}}
+                </el-button>
+                <el-button class="nav-edit"
+                           @click="addNav"
+                           type="primary"
+                           size="small"
+                           icon="el-icon-plus"
+                           v-if="editing"
+                           :disabled="pages.length>4">
+                    添加
+                </el-button>
+            </div>
+        </nav>
+        <div class="wrapper" id="home" :style="`background: ${home.bg}`">
+
+        </div>
+        <div class="wrapper"
+        v-for="(item,index) in pages"
+        :style="'background: '+ (item.type==='tab'? pages[index].tabs[pages[index].currentTab].bg : pages[index].bg)">
+            <h2 v-if="item.type!=='tab'"
+                :class="'wrapper-'+item.type+'-title'">
+                {{pages[index].title}}
+                <el-tooltip v-if="editing" class="item" effect="dark" content="编辑标题" placement="right">
+                    <span class="editTitle" @click="editTitle(index,'title')">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-edit"></use>
+                        </svg>
+                    </span>
+                </el-tooltip>
+            </h2>
+            <h6 v-if="item.type!=='tab'"
+                :class="'wrapper-'+item.type+'-secondTitle'">
+                {{pages[index].secondTitle}}
+                <el-tooltip v-if="editing" class="item" effect="dark" content="编辑二级标题" placement="right">
+                    <span class="editTitle" @click="editTitle(index,'secondTitle')">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-edit"></use>
+                        </svg>
+                    </span>
+                </el-tooltip>
+            </h6>
+            <p v-if="item.type==='words'"
+               class="wrapper-text">
+                {{pages[index].content}}
+                <el-tooltip v-if="editing" class="item" effect="dark" content="编辑内容" placement="right">
+                    <span class="editContent" @click="editTitle(index,'content')">
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-edit"></use>
+                        </svg>
+                    </span>
+                </el-tooltip>
+            </p>
+            <div v-if="item.type==='tab'"
+                class="wrapper-tab">
+                <ul>
+                    <li v-for="(_item,_index) in pages[index].tabs"
+                        :class="{'current-tab': pages[index].currentTab===_index}"
+                        @click="tabClick(index,_index)">
+                        {{_item.name}}
+                        <ul class="edit-tab" v-if="editing" @click.stop>
+                            <li @click="delTab(index,_index)" style="float: left;" v-if="pages[index].tabs.length>2">
+                                <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use xlink:href="#icon-shanchu"></use>
+                                    </svg>
+                                </el-tooltip>
+                            </li>
+                            <li @click="editTab(index,_index,'edit')" style="float:right;">
+                                <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use xlink:href="#icon-edit"></use>
+                                    </svg>
+                                </el-tooltip>
+                            </li>
+                            <!--<li @click="navSort(index)" v-show="pages.length>1">
+                                <el-tooltip class="item" effect="dark" content="移动" placement="right">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use xlink:href="#icon-move"></use>
+                                    </svg>
+                                </el-tooltip>
+                            </li>-->
+                        </ul>
+                    </li>
+                    <li v-if="editing"class="tab-edit-button">
+                        <el-button @click="editTab(index,null,'add')"
+                                   type="primary"
+                                   size="mini"
+                                   icon="el-icon-plus"
+                                   :disabled="pages[index].tabs.length>4">
+                            添加
+                        </el-button>
+                    </li>
+                </ul>
+
+            </div>
+            <ul v-if="item.type==='imgTip'"
+                class="wrapper-imgList"
+                :style="'width: '+(330*pages[index].list.length-130)+'px'">
+                <li v-for="(_item,_index) in pages[index].list"
+                :class="{'wrapper-imgList-item-right': _index===pages[index].list.length-1}">
+                    <div class="wrapper-imgList-item-img">
+                        <img :src="_item.img" alt="">
+                    </div>
+                    <h6 class="wrapper-imgList-item-title">{{_item.title}}</h6>
+                    <p class="wrapper-imgList-item-content">{{_item.secondTitle}}</p>
+                    <ul class="imgTip-edit" v-if="editing">
+                        <li @click="editImgTip(index,_index,'edit')">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="right">
+                                <svg class="icon" aria-hidden="true">
+                                    <use xlink:href="#icon-edit"></use>
+                                </svg>
+                            </el-tooltip>
+                        </li>
+                        <li style="margin-top: 10px;"
+                            @click="delImgTip(index,_index)"
+                            v-if="pages[index].list.length>2">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="right">
+                                <svg class="icon" aria-hidden="true">
+                                    <use xlink:href="#icon-shanchu"></use>
+                                </svg>
+                            </el-tooltip>
+                        </li>
+                    </ul>
+                </li>
+                <li class="edit-imgTip" v-if="editing">
+                    <el-button @click="editImgTip(index,null,'add')"
+                               type="primary"
+                               size="mini"
+                               icon="el-icon-plus"
+                               :disabled="pages[index].list.length>3">
+                        添加
+                    </el-button>
+                </li>
+            </ul>
+            <ul v-if="item.type==='wordTip'"
+                class="wrapper-wordTip"
+                :style="`width: ${pages[index].tips.length*265+(pages[index].tips.length-1)*45}px`">
+                <li v-for="(_item,_index) in pages[index].tips"
+                    :class="{'wrapper-wordTips-right': _index===pages[index].tips.length-1}"
+                    :style="`background: ${_item.bg}`">
+                    <h6 class="wrapper-wordTips-title"
+                        :style="`background: ${_item.titleBg};color: ${_item.titleColor}`">
+                        {{_item.title}}
+                        <ul class="wordTips-edit" v-if="editing">
+                            <li @click="editWordTip(index,_index,'editTip')">
+                                <el-tooltip class="item" effect="dark" content="编辑" placement="right">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use xlink:href="#icon-edit"></use>
+                                    </svg>
+                                </el-tooltip>
+                            </li>
+                            <li style="margin-top: 10px;"
+                                @click="delWordTip(index,_index)"
+                                v-if="pages[index].tips.length>2">
+                                <el-tooltip class="item" effect="dark" content="删除" placement="right">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use xlink:href="#icon-shanchu"></use>
+                                    </svg>
+                                </el-tooltip>
+                            </li>
+                        </ul>
+                    </h6>
+                    <ul class="wrapper-wordTips-lists">
+                        <li v-for="(__item,__index) in _item.list"
+                            :style="`color: ${_item.listColor};`">
+                            {{__item}}
+                            <ul class="wordTipItem-edit" v-if="editing">
+                                <li @click="editWordTip(index,_index,__index,'editTipItem')">
+                                    <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                                        <svg class="icon" aria-hidden="true">
+                                            <use xlink:href="#icon-edit"></use>
+                                        </svg>
+                                    </el-tooltip>
+                                </li>
+                                <li style="margin-left: 5px;"
+                                    @click="delWordTip(index,_index,__index)"
+                                    v-if="pages[index].tips[_index].list.length>2">
+                                    <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                                        <svg class="icon" aria-hidden="true">
+                                            <use xlink:href="#icon-shanchu"></use>
+                                        </svg>
+                                    </el-tooltip>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="add-wordTipItem" v-if="editing">
+                            <el-button @click="addWordTip(index,_index)"
+                                       type="primary"
+                                       size="mini"
+                                       icon="el-icon-plus"
+                                       :disabled="pages[index].tips[_index].list.length>3">
+                                添加
+                            </el-button>
+                        </li>
+                    </ul>
+                </li>
+                <li class="add-wordTip" v-if="editing">
+                    <el-button @click="addWordTip(index)"
+                               type="primary"
+                               size="mini"
+                               icon="el-icon-plus"
+                               :disabled="pages[index].tips.length>3">
+                        添加
+                    </el-button>
+                </li>
+            </ul>
+            <div v-if="item.type==='location'"
+                 class="wrapper-location-content">
+                <ul class="wrapper-location-concat">
+                    <li>
+                        <svg class="icon wrapper-location-icon" aria-hidden="true">
+                            <use xlink:href="#icon-dianhua"></use>
+                        </svg>
+                        <p>
+                            {{pages[index].phone.text}}
+                            <el-tooltip v-if="editing" class="item" effect="dark" content="编辑" placement="right">
+                                <span class="editLocation" @click="editLocation(index,'phoneText')">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use xlink:href="#icon-edit"></use>
+                                    </svg>
+                                </span>
+                            </el-tooltip>
+                        </p>
+                        <span>
+                            {{pages[index].phone.subText}}
+                            <el-tooltip v-if="editing" class="item" effect="dark" content="编辑" placement="right">
+                                <span class="editLocation" @click="editLocation(index,'phoneSubText')">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use xlink:href="#icon-edit"></use>
+                                    </svg>
+                                </span>
+                            </el-tooltip>
+                        </span>
+                    </li>
+                    <li>
+                        <svg class="icon wrapper-location-icon" aria-hidden="true">
+                            <use xlink:href="#icon-erji"></use>
+                        </svg>
+                        <p class="wrapper-location-kf">{{pages[index].kf}}</p>
+                        <el-tooltip v-if="editing" class="item" effect="dark" content="编辑" placement="right">
+                                <span class="editLocation" @click="editLocation(index,'kf')">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use xlink:href="#icon-edit"></use>
+                                    </svg>
+                                </span>
+                        </el-tooltip>
+                    </li>
+                    <li>
+                        <svg class="icon wrapper-location-icon" aria-hidden="true">
+                            <use xlink:href="#icon-wchart"></use>
+                        </svg>
+                        <img :src="pages[index].img" alt="" />
+                        <el-tooltip v-if="editing" class="item" effect="dark" content="编辑" placement="right">
+                                <span class="editLocation" @click="editLocation(index,'img')">
+                                    <svg class="icon" aria-hidden="true">
+                                        <use xlink:href="#icon-edit"></use>
+                                    </svg>
+                                </span>
+                        </el-tooltip>
+                    </li>
+                </ul>
+                <div id="map"></div>
+            </div>
+        </div>
+        <el-dialog
+                title=""
+                :visible="resetNavNameDialog.show"
+                width="300px"
+                center
+                :show-close="false">
+            <el-input v-model="editingContent" placeholder="请输入"></el-input>
+            <span slot="footer" class="dialog-footer">
+                        <el-button @click="resetNavNameDialogCancel">取 消</el-button>
+                        <el-button type="primary" @click="resetNavNameDialogSubmit">确 定</el-button>
+                    </span>
+        </el-dialog>
+        <el-dialog
+                title=""
+                :visible="addNavDialog.show"
+                width="300px"
+                center
+                :show-close="false">
+            <el-input v-model="editingContent" placeholder="请输入标签名"></el-input>
+            <el-select v-model="addNavDialog.type" placeholder="请选择标签类型" class="ant">
+                <el-option v-for="item in modOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="addNavDialogCancel">取 消</el-button>
+                <el-button type="primary" @click="addNavDialogSubmit">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+                title=""
+                :visible="editTitleDialog.show"
+                width="300px"
+                center
+                :show-close="false">
+            <el-input v-if="editTitleDialog.action==='content'"
+                      type="textarea"
+                      :autosize="{ minRows: 2, maxRows: 6}"
+                      placeholder="请输入内容"
+                      resize="false"
+                      v-model="editingContent">
+            </el-input>
+            <el-input v-else v-model="editingContent" placeholder="请输入"></el-input>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="editTitleDialogCancel">取 消</el-button>
+                <el-button type="primary" @click="editTitleDialogSubmit">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+                title=""
+                :visible="tabDialog.show"
+                width="300px"
+                center
+                :show-close="false">
+            <el-form label-position="top">
+                <el-form-item label="标签名：">
+                    <el-input v-model="editingContent" placeholder="请输入"></el-input>
+                </el-form-item>
+                <el-form-item label="背景图片：（建议尺寸16:9）">
+                    <el-upload
+                            class="avatar-uploader"
+                            action="#"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                        <img v-if="tabDialog.imgUrl" :src="tabDialog.imgUrl" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="tabDialogCancel">取 消</el-button>
+                <el-button type="primary" @click="tabDialogSubmit">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+                title=""
+                :visible="imgTipDialog.show"
+                width="300px"
+                center
+                :show-close="false">
+            <el-form label-position="top">
+                <el-form-item label="标题：">
+                    <el-input v-model="imgTipDialog.title" placeholder="请输入"></el-input>
+                </el-form-item>
+                <el-form-item label="二级标题：">
+                    <el-input v-model="imgTipDialog.secondTitle" placeholder="请输入"></el-input>
+                </el-form-item>
+                <el-form-item label="背景图片：（建议尺寸1:1）">
+                    <el-upload
+                            class="avatar-uploader"
+                            action="#"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                        <img v-if="imgTipDialog.imgUrl" :src="imgTipDialog.imgUrl" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="imgTipDialogCancel">取 消</el-button>
+                <el-button type="primary" @click="imgTipDialogSubmit">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            title=""
+            :visible="wordTipDialog.show"
+            width="300px"
+            center
+            :show-close="false">
+        <el-input v-model="wordTipDialog.editingVal" placeholder="请输入"></el-input>
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="wordTipDialogCancel">取 消</el-button>
+                <el-button type="primary" @click="wordTipDialogSubmit">确 定</el-button>
+            </span>
+    </el-dialog>
+        <el-dialog
+                title=""
+                :visible="locationDialog.show"
+                width="300px"
+                center
+                :show-close="false">
+            <el-form label-position="top">
+                <el-form-item label="编辑内容：">
+                    <el-input v-model="locationDialog.editingVal" placeholder="请输入"></el-input>
+                </el-form-item>
+                <el-form-item label="背景图片：（建议尺寸1:1）" v-if="locationDialog.action==='img'">
+                    <el-upload
+                            class="avatar-uploader"
+                            action="#"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                        <img v-if="locationDialog.imgUrl" :src="locationDialog.imgUrl" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="LocationDialogCancel">取 消</el-button>
+                <el-button type="primary" @click="LocationDialogSubmit">确 定</el-button>
+            </span>
+        </el-dialog>
+        <!--<div class="wrapper" :style="`background: ${pages[0].bg};`">
+            <h2 class="wrapper-words-title">{{pages[0].title}}</h2>
+            <h6 class="wrapper-words-secondTitle">{{pages[0].secondTitle}}</h6>
+            <p class="wrapper-text">{{pages[0].content}}</p>
+        </div>
+        <div class="wrapper" :style="`background: ${pages[1].tabs[pages[1].currentTab].bg}`">
+            <div class="wrapper-tab">
+                <ul>
+                    <li
+                    v-for="(v,i) in pages[1].tabs"
+                    :class="{'current-tab': pages[1].currentTab===i}"
+                    @click="tabClick(1,i)">
+                        {{v.name}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="wrapper" :style="`background: ${pages[2].bg}`">
+            <h2 class="wrapper-imgTip-title">{{pages[2].title}}</h2>
+            <h6 class="wrapper-imgTip-secondTitle">{{pages[2].secondTitle}}</h6>
+            <ul class="wrapper-imgList">
+                <li
+                v-for="v in pages[2].list"
+                :class="{'wrapper-imgList-item-right': v.isRight}">
+                    <div class="wrapper-imgList-item-img">
+                        <img :src="v.img" alt="">
+                    </div>
+                    <h6 class="wrapper-imgList-item-title">{{v.title}}</h6>
+                    <p class="wrapper-imgList-item-content">{{v.secondTitle}}</p>
+                </li>
+            </ul>
+        </div>
+        <div class="wrapper" :style="`background: ${pages[3].bg}`">
+            <h2 class="wrapper-wordTip-title">{{pages[3].title}}</h2>
+            <h6 class="wrapper-wordTip-secondTitle">{{pages[3].secondTitle}}</h6>
+            <ul class="wrapper-wordTip"
+                :style="`width: ${pages[3].tips.length*265+(pages[3].tips.length-1)*45}px`">
+                <li v-for="(v,i) in pages[3].tips"
+                    :class="{'wrapper-wordTips-right': i===pages[3].tips.length-1}"
+                    :style="`background: ${v.bg}`">
+                    <h6 class="wrapper-wordTips-title"
+                        :style="`background: ${v.titleBg};color: ${v.titleColor}`">
+                        {{v.title}}
+                    </h6>
+                    <ul class="wrapper-wordTips-lists">
+                        <li v-for="vv in v.list"
+                            :style="`color: ${v.listColor};`">
+                            {{vv}}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="wrapper" :style="`background: ${pages[4].bg};`">
+            <h2 class="wrapper-location-title">{{pages[4].title}}</h2>
+            <h6 class="wrapper-location-secondTitle">{{pages[4].secondTitle}}</h6>
+            <div class="wrapper-location-content">
+                <ul class="wrapper-location-concat">
+                    <li>
+                        <svg class="icon wrapper-location-icon" aria-hidden="true">
+                            <use xlink:href="#icon-dianhua"></use>
+                        </svg>
+                        <p>{{pages[4].phone.text}}</p>
+                        <span>{{pages[4].phone.subText}}</span>
+                    </li>
+                    <li>
+                        <svg class="icon wrapper-location-icon" aria-hidden="true">
+                            <use xlink:href="#icon-erji"></use>
+                        </svg>
+                        <p class="wrapper-location-kf">{{pages[4].kf}}</p>
+                    </li>
+                    <li>
+                        <svg class="icon wrapper-location-icon" aria-hidden="true">
+                            <use xlink:href="#icon-wchart"></use>
+                        </svg>
+                        <img :src="pages[4].img" alt="">
+                    </li>
+                </ul>
+                <div class="map"></div>
+            </div>
+        </div>-->
+    </div>
+    <script src="./js/vue.js"></script>
+    <script src="./js/jquery-3.2.1.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="./js/iconfont.js"></script>
+    <script src="./js/iconfont2.js"></script>
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=L6VmNRZnnMORjN6WPFRDW89LboYGL1pY"></script>
+    <script>
+        const app = new Vue({
+            el: '#container',
+            data: {
+                locationDialog: { show: false, action: null, imgUrl: '', editingVal: '', editingIndex: null},
+                wordTipDialog: { show: false, editing: [], editingVal: '', action: null},
+                imgTipDialog: {
+                    show: false,
+                    action: null,
+                    editing: [],
+                    imgUrl: '',
+                    title: '',
+                    secondTitle: '',
+                },
+                tabDialog: { show: false, action: null, editing: [], imgUrl: ''},
+                editTitleDialog: { show: false, action: null, editing: null,},
+                addNavDialog: { show: false, type: ''},
+                resetNavNameDialog: { show: false, editing: null},
+                editingContent: '',
+                map: null,
+                navMenu: ['关于我们', '产品介绍', '服务', '案例展示', '联系我们'],
+                wrapperScrollTop: [],
+                defaultActive: '0',
+                home: {bg: 'url(./images/home.png)'},
+                pages: [
+                    {
+                        type: 'words',
+                        title: '我们是美管加',
+                        secondTitle: '携手带领美业，一步一个脚印，走向未来。',
+                        content: '上海七圣网络科技有限公司（简称美管加）成立于2007年，历经十一年发展，目前成为中国美业全面领先的管理软件提供商。秉承让美业轻松实现互联网化运营的使命，美管加定位为面向美业商户提供极致体验的互联网运营系统和帮助门店全面提升运营能力的增值服务。美管加通过为商户提供一套完整的互联网化运营管理软件，相关硬件产品和增值服务，能让门店轻松实现线上和线下一体化运营。美管加在上海、深圳和武汉三地分别设立运营，营销和研发中心，同时在全国各省市建立了38个销售网点，覆盖国内31个省市和部分海外国家。 美管加在全国已有超过50000家客户，帮助美业商户高效管理近6000万消费者。公司正全方位加速发展，致力于推动中国美业的健康持续发展。',
+                        bg: '#eeeeee',
+                    },
+                    {
+                        type: 'tab',
+                        tabs: [
+                            {name: '美一刻', bg: 'url(./images/myk.png)'},
+                            {name: '生意宝', bg: 'url(./images/syb.png)'},
+                            {name: '无纸化', bg: 'url(./images/wzh.png)'},
+                            {name: '电子轮牌', bg: 'url(./images/dzlp.png)'},
+                            {name: '超级收银', bg: 'url(./images/cjsy.png)'}
+                        ],
+                        currentTab: 0,
+                    },
+                    {
+                        type: 'imgTip',
+                        title: '美管加服务',
+                        secondTitle: '一步到位开启美业互联网运营时代',
+                        bg: '#eeeeee',
+                        list: [
+                            {
+                                img: './images/mgjxt.png',
+                                isRight: false,
+                                title: '美管加系统',
+                                secondTitle: '美业互联网基础系统',
+                            },
+                            {
+                                img: './images/mxe.png',
+                                isRight: false,
+                                title: '美小二',
+                                secondTitle: '美业互联网基础服务',
+                            },
+                            {
+                                img: './images/mzz.png',
+                                isRight: false,
+                                title: '美知知',
+                                secondTitle: '美业互联网基础教育',
+                            },
+                            {
+                                img: './images/myy.png',
+                                isRight: true,
+                                title: '美盈盈',
+                                secondTitle: '美业互联网代运营',
+                            }
+                        ],
+                    },
+                    {
+                        type: 'wordTip',
+                        title: '美管加版本',
+                        secondTitle: '选择最合适你的',
+                        bg: '#0b0b0b',
+                        tips: [
+                            {
+                                title: '盛传版',
+                                bg: '#2a2a2a',
+                                titleBg: '#dcdcdc',
+                                titleColor: '#5c5c5c',
+                                listColor: '#d2d2d2',
+                                list: [
+                                    '基础收银',
+                                    '库存管理',
+                                ],
+                            },
+                            {
+                                title: '风尚版',
+                                bg: '#2a2a2a',
+                                titleBg: '#4e936e',
+                                titleColor: 'white',
+                                listColor: '#d2d2d2',
+                                list: [
+                                    '会员中心',
+                                    '微信平台',
+                                ],
+                            }
+                        ],
+                    },
+                    {
+                        type: 'location',
+                        title: '我们是美管加',
+                        secondTitle: '带领美业，一步一个脚印，走向未来。',
+                        bg: '#151515',
+                        phone: {
+                            text: '0755-28288128',
+                            subText: '周一到周六9:30-21:00，周日9:30-18:30',
+                        },
+                        kf: 'QQ：888888888',
+                        img: './images/er.png',
+                    }
+                ],
+                editing: false,
+                pageMod: {
+                    words: {
+                        type: 'words',
+                        title: '标题',
+                        secondTitle: '二级标题',
+                        content: '内容',
+                        bg: '#eeeee',
+                    },
+                    tab: {
+                        type: 'tab',
+                        tabs: [
+                            {name: '标签1', bg: 'white'},
+                            {name: '标签2', bg: 'gray'}
+                        ],
+                        currentTab: 0,
+                    },
+                    imgTip: {
+                        type: 'imgTip',
+                        title: '标题',
+                        secondTitle: '二级标题',
+                        bg: '#eeeeee',
+                        list: [
+                            {
+                                img: './images/mgjxt.png',
+                                title: '标题',
+                                secondTitle: '二级标题',
+                            },
+                            {
+                                img: './images/mxe.png',
+                                title: '标题',
+                                secondTitle: '二级标题',
+                            },
+                        ],
+                    },
+                    wordTip: {
+                        type: 'wordTip',
+                        title: '标题',
+                        secondTitle: '二级标题',
+                        bg: '#0b0b0b',
+                        tips: [
+                            {
+                                title: '标题',
+                                bg: '#2a2a2a',
+                                titleBg: '#dcdcdc',
+                                titleColor: '#5c5c5c',
+                                listColor: '#d2d2d2',
+                                list: [
+                                    '标签1',
+                                    '标签2',
+                                ],
+                            },
+                            {
+                                title: '标题',
+                                bg: '#2a2a2a',
+                                titleBg: '#4e936e',
+                                titleColor: 'white',
+                                listColor: '#d2d2d2',
+                                list: [
+                                    '标签1',
+                                    '标签2',
+                                ],
+                            }
+                        ],
+                    },
+                    location: {
+                        type: 'location',
+                        title: '标题',
+                        secondTitle: '二级标题',
+                        bg: '#151515',
+                        phone: {
+                            text: '电话',
+                            subText: '上班时间',
+                        },
+                        kf: 'QQ',
+                        img: './images/er.png',
+                    },
+                },
+                modOptions: [
+                    { label: '纯文字', value: 'words'},
+                    { label: '页面切换', value: 'tab'},
+                    { label: '图片tip', value: 'imgTip'},
+                    { label: '文字tip', value: 'wordTip'},
+                    { label: '联系方式、地址', value: 'location'}
+                ],
+            },
+            methods: {
+                LocationDialogSubmit() {
+                    const i = this.locationDialog.editingIndex
+                    if(this.locationDialog.action==='phoneText') this.pages[i].phone.text = this.locationDialog.editingVal
+                    if(this.locationDialog.action==='phoneSubText') this.pages[i].phone.subText = this.locationDialog.editingVal
+                    if(this.locationDialog.action==='kf') this.pages[i].kf = this.locationDialog.editingVal
+                    if(this.locationDialog.action==='img') this.pages[i].img = this.locationDialog.imgUrl
+                    this.locationDialog.show = false
+                    this.locationDialog.editingVal = ''
+                    this.locationDialog.imgUrl = ''
+                    this.showMsg('edit')
+                },
+                LocationDialogCancel() {
+                    this.locationDialog.show = false
+                    this.locationDialog.editingVal = ''
+                    this.locationDialog.imgUrl = ''
+                },
+                editLocation(i,action) {
+                    this.locationDialog.action = action
+                    this.locationDialog.editingIndex = i
+                    this.locationDialog.show = true
+                },
+
+                addWordTip(i,_i) {
+                    if(arguments.length>1){
+                        this.wordTipDialog.action = 'addTipItem'
+                        this.wordTipDialog.editing = [i,_i]
+                        this.wordTipDialog.show = true
+                    }
+                    else{
+                        this.wordTipDialog.action = 'addTip'
+                        this.wordTipDialog.editing = [i]
+                        this.wordTipDialog.show = true
+                    }
+                },
+                wordTipDialogSubmit() {
+                    const i = this.wordTipDialog.editing[0]
+                    const _i = this.wordTipDialog.editing[1]
+                    if(this.wordTipDialog.action==='editTip'){
+                        if(this.wordTipDialog.editingVal.length>6){
+                            alert('不能超过6个字符')
+                            return
+                        }
+                        this.pages[i].tips[_i].title = this.wordTipDialog.editingVal
+                        this.showMsg('edit')
+                    }
+                    else if(this.wordTipDialog.action==='editTipItem'){
+                        if(this.wordTipDialog.editingVal.length>12){
+                            alert('不能超过12个字符')
+                            return
+                        }
+                        const __i = this.wordTipDialog.editing[2]
+                        this.pages[i].tips[_i].list[__i] = this.wordTipDialog.editingVal
+                        this.showMsg('edit')
+                    }
+                    else if(this.wordTipDialog.action==='addTip'){
+                        if(this.wordTipDialog.editingVal.length>6){
+                            alert('不能超过6个字符')
+                            return
+                        }
+                        const obj = JSON.parse(JSON.stringify(this.pageMod.wordTip.tips[0]))
+                        obj.title = this.wordTipDialog.editingVal
+                        this.pages[i].tips.push(obj)
+                        this.showMsg('add')
+                    }
+                    else{
+                        if(this.wordTipDialog.editingVal.length>12){
+                            alert('不能超过12个字符')
+                            return
+                        }
+                        this.pages[i].tips[_i].list.push(this.wordTipDialog.editingVal)
+                        this.showMsg('add')
+                    }
+                    this.wordTipDialog.show = false
+                    this.wordTipDialog.editingVal = ''
+                    this.wordTipDialog.editing = []
+                },
+                wordTipDialogCancel() {
+                    this.wordTipDialog.editing = []
+                    this.wordTipDialog.editingVal = ''
+                    this.wordTipDialog.show = false
+                },
+                editWordTip(i,_i,__i,action) {
+                    if(action){
+                        this.wordTipDialog.action = action
+                        this.wordTipDialog.editingVal = this.pages[i].tips[_i].list[__i]
+                        this.wordTipDialog.editing = [i,_i,__i]
+                    }
+                    else{
+                        this.wordTipDialog.action = __i
+                        this.wordTipDialog.editingVal = this.pages[i].tips[_i].title
+                        this.wordTipDialog.editing = [i,_i]
+                    }
+                    this.wordTipDialog.show = true
+                },
+                delWordTip(i,_i,__i) {
+                    if(arguments.length>2) this.pages[i].tips[_i].list.splice(__i,1)
+                    else this.pages[i].tips.splice(_i,1)
+                    this.showMsg('del')
+                },
+
+                imgTipDialogSubmit() {
+                    if(this.imgTipDialog.title.length>6){
+                        alert('标题不能超过6个字符')
+                        return
+                    }
+                    else if(this.imgTipDialog.secondTitle.length>12){
+                        alert('二级标题不能超过12个字符')
+                        return
+                    }
+                    const i = this.imgTipDialog.editing[0]
+                    if(this.imgTipDialog.action==='edit'){
+                        const _i = this.imgTipDialog.editing[1]
+                        this.pages[i].list[_i].title = this.imgTipDialog.title
+                        this.pages[i].list[_i].secondTitle = this.imgTipDialog.secondTitle
+                        this.showMsg('edit')
+                    }
+                    else{
+                        const obj = JSON.parse(JSON.stringify(this.pageMod.imgTip.list[0]))
+                        obj.title = this.imgTipDialog.title
+                        obj.secondTitle = this.imgTipDialog.secondTitle
+                        this.pages[i].list.push(obj)
+                        this.showMsg('add')
+                    }
+                    this.imgTipDialog.show = false
+                    this.imgTipDialog.editing = []
+                    this.imgTipDialog.title = ''
+                    this.imgTipDialog.secondTitle = ''
+                },
+                imgTipDialogCancel() {
+                    this.imgTipDialog.editing = []
+                    this.imgTipDialog.show = false
+                },
+                editImgTip(i,_i,action) {
+                    this.imgTipDialog.editing = [i,_i]
+                    this.imgTipDialog.action = action
+                    this.imgTipDialog.show = true
+                },
+                delImgTip(i,_i) {
+                    this.pages[i].list.splice(_i,1)
+                    this.showMsg('del')
+                },
+
+                tabDialogSubmit() {
+                    if(this.editingContent.length>5){
+                        alert('不能超过5个字符')
+                        return
+                    }
+                    const i = this.tabDialog.editing[0]
+                    if(this.tabDialog.action==='edit'){
+                        const _i = this.tabDialog.editing[1]
+                        this.pages[i].tabs[_i].name = this.editingContent
+                        this.showMsg('edit')
+                    }
+                    else{
+                        const obj = JSON.parse(JSON.stringify(this.pageMod.tab.tabs[0]))
+                        obj.name = this.editingContent
+                        this.pages[i].tabs.push(obj)
+                        this.showMsg('add')
+                    }
+                    this.editingContent = ''
+                    this.tabDialog.show = false
+                },
+                tabDialogCancel() {
+                    this.editingContent = ''
+                    this.tabDialog.editing = []
+                    this.tabDialog.show = false
+                },
+                editTab(i,_i,action) {
+                    this.tabDialog.action = action
+                    this.editingContent = this.pages[i].tabs[_i].name
+                    this.tabDialog.editing = [i,_i]
+                    this.tabDialog.show = true
+                },
+                delTab(i,_i) {
+                    this.pages[i].tabs.splice(_i,1)
+                    this.showMsg('del')
+                },
+
+                editTitle(i,action) {
+                    this.editTitleDialog.action = action
+                    this.editTitleDialog.editing = i
+                    this.editTitleDialog.show = true
+                    this.editingContent = this.pages[i][action]
+                },
+                editTitleDialogSubmit() {
+                    this.pages[this.editTitleDialog.editing][this.editTitleDialog.action] = this.editingContent
+                    this.editingContent = ''
+                    this.editTitleDialog.show = false
+                    this.showMsg('edit')
+                },
+                editTitleDialogCancel() {
+                    this.editTitleDialog.show = false
+                    this.editingContent = ''
+                },
+
+                addNavDialogSubmit() {
+                    if(this.editingContent.length>6){
+                        alert('不能超过6个字符')
+                        return
+                    }
+                    this.navMenu[this.navMenu.length] = this.editingContent
+                    const obj = JSON.parse(JSON.stringify(this.pageMod[this.addNavDialog.type]))
+                    this.pages.push(obj)
+                    this.addNavDialog.show = false
+                    this.editingContent = ''
+                    const _this = this
+                    this.showMsg('add')
+                    window.setTimeout(function () {
+                        _this.getWrapperOffsetTop()
+                        $('html,body').animate({'scrollTop': _this.wrapperScrollTop[_this.pages.length]},350)
+                    },110)
+                },
+                addNavDialogCancel() {
+                    this.addNavDialog.show = false
+                    this.editingContent = ''
+                },
+                addNav() {
+                    this.addNavDialog.show = true
+                },
+
+                navSort(i) {
+
+                },
+                resetNavNameDialogSubmit() {
+                    const editing = this.resetNavNameDialog.editing
+                    if(this.editingContent.length>6){
+                        alert('不能超过6个字符')
+                        return
+                    }
+                    this.navMenu[editing] = this.editingContent
+                    this.resetNavNameDialog.show = false
+                    this.resetNavNameDialog.editing = null
+                    this.editingContent = ''
+                    const _this = this
+                    this.showMsg('edit')
+                    window.setTimeout(function () {
+                        _this.getWrapperOffsetTop()
+                        $('html,body').animate({'scrollTop': _this.wrapperScrollTop[editing+1]},350)
+                    },110)
+                },
+                resetNavNameDialogCancel() {
+                    this.resetNavNameDialog.show = false
+                    this.resetNavNameDialog.editing = null
+                    this.editingContent = ''
+                },
+                resetNavName(i) {
+                    this.resetNavNameDialog.show = true
+                    this.resetNavNameDialog.editing = i
+                },
+                delNav(i) {
+                    this.navMenu.splice(i,1)
+                    this.pages.splice(i,1)
+                    this.showMsg('del')
+                    window.setTimeout(this.getWrapperOffsetTop,100)
+                },
+                edit() {
+                    this.editing = !this.editing;
+                },
+                setMap() {
+                    new BMap.Geolocation().getCurrentPosition(function(r){
+                        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                            map.centerAndZoom(r.point,15);
+                            map.addOverlay(new BMap.Marker(r.point));
+                        }
+                        else{
+                            alert('failed'+this.getStatus());
+                        }
+                    },{ enableHighAccuracy: true });
+                    const map = new BMap.Map('map');
+                    map.enableScrollWheelZoom(true);
+                    map.addControl(new BMap.NavigationControl());
+                    map.addControl(new BMap.ScaleControl());
+                    map.addControl(new BMap.OverviewMapControl());
+                    map.addControl(new BMap.MapTypeControl());
+                    this.map = map;
+                },
+                tabClick(page, index) {
+                    this.pages[page].currentTab = index
+                },
+                getWrapperOffsetTop() {
+                    this.wrapperScrollTop = []
+                    for (let i = 0; i < $('.wrapper').length; i++) {
+                        this.wrapperScrollTop[i] = $('.wrapper').eq(i).offset().top
+                    }
+                },
+                windowScroll() {
+                    const scrollTop = $(window).scrollTop()
+                    const _this = this
+                    this.wrapperScrollTop.forEach(function (item, index) {
+                        let height = $('.wrapper').eq(index).height()
+                        let top = $('.wrapper').eq(index).offset().top
+                        let previousHeight = $('.wrapper').eq(index - 1 < 0 ? index : index - 1)
+                            .height()
+                        if (scrollTop >= top - previousHeight / 2 && scrollTop < (top + height / 2)) {
+                            _this.defaultActive = index + ''
+                            return
+                        }
+                    })
+                },
+                setWindowScroll() {
+                    $(window).scroll(this.windowScroll)
+                },
+                handleSelect(val) {
+                    $('html,body').animate({
+                        'scrollTop': $('.wrapper').eq(val).offset().top
+                    }, 350)
+                },
+                handleAvatarSuccess() {},
+                beforeAvatarUpload() {},
+                showMsg(type) {
+                    if(type==='add') this.$message.success('添加成功！')
+                    else if(type==='edit') this.$message.success('编辑成功！')
+                    else this.$message.success('删除成功！')
+                }
+            },
+            mounted() {
+                this.getWrapperOffsetTop();
+                this.setWindowScroll();
+                this.windowScroll();
+                this.setMap();
+            },
+        });
+    </script>
+</body>
+
+</html>
