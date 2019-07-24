@@ -39,23 +39,17 @@ h1{
     background-size: 100% 100%;
 }
 .wrapper-words-title{
-    font-size: 40px;
     line-height: 60px;
     text-align: center;
-    color: #3b3b3b;
     margin-top: 50px;
     font-weight: bold;
 }
 .wrapper-text{
     width: 800px;
     margin: 30px auto 0;
-    font-size: 18px;
-    color: #9d9d9d;
-    line-height: 30px;
     word-break: break-all;
 }
 .wrapper-words-secondTitle{
-    font-size: 24px;
     line-height: 40px;
     color: #9d9d9d;
     margin: 20px auto 0;
@@ -90,17 +84,13 @@ h1{
     border-color: #982ea7;
 }
 .wrapper-imgTip-title{
-    font-size: 40px;
     line-height: 60px;
     text-align: center;
-    color: #3b3b3b;
     margin-top: 50px;
     font-weight: 300;
 }
 .wrapper-imgTip-secondTitle{
-    font-size: 24px;
     line-height: 40px;
-    color: #9d9d9d;
     margin: 20px auto 0;
     text-align: center;
 }
@@ -145,17 +135,13 @@ h1{
     line-height: 20px;
 }
 .wrapper-location-title{
-    font-size: 28px;
     text-align: center;
     line-height: 36px;
-    color: #828282;
     margin: 150px auto 0;
 }
 .wrapper-location-secondTitle{
-    font-size: 12px;
     text-align: center;
     line-height: 28px;
-    color: #828282;
     margin: 10px auto 0;
 }
 .wrapper-location-content{
@@ -212,16 +198,12 @@ h1{
     float: right;
 }
 .wrapper-wordTip-title{
-    color: white;
-    font-size: 44px;
     font-weight: bold;
     line-height: 52px;
     margin: 80px auto 0;
     text-align: center;
 }
 .wrapper-wordTip-secondTitle{
-    font-size: 16px;
-    color: white;
     line-height: 20px;
     margin: 20px auto 0;
     text-align: center;

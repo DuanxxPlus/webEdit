@@ -73,10 +73,11 @@
         </div>
         <div class="wrapper"
         v-for="(item,index) in pages"
-        :style="'background: '+ (item.type==='tab'? pages[index].tabs[pages[index].currentTab].bg : pages[index].bg)">
+        :style="'background: '+ (item.type==='tab'? item.tabs[item.currentTab].bg : item.bg)">
             <h2 v-if="item.type!=='tab'"
-                :class="'wrapper-'+item.type+'-title'">
-                {{pages[index].title}}
+                :class="'wrapper-'+item.type+'-title'"
+                :style="'font-size: '+item.title.fontSize+'px; color: '+item.title.color">
+                {{item.title.label}}
                 <el-tooltip v-if="editing" class="item" effect="dark" content="编辑标题" placement="right">
                     <span class="editTitle" @click="editTitle(index,'title')">
                         <svg class="icon" aria-hidden="true">
@@ -86,8 +87,9 @@
                 </el-tooltip>
             </h2>
             <h6 v-if="item.type!=='tab'"
-                :class="'wrapper-'+item.type+'-secondTitle'">
-                {{pages[index].secondTitle}}
+                :class="'wrapper-'+item.type+'-secondTitle'"
+                :style="'font-size: '+item.secondTitle.fontSize+'px; color: '+item.secondTitle.color">
+                {{item.secondTitle.label}}
                 <el-tooltip v-if="editing" class="item" effect="dark" content="编辑二级标题" placement="right">
                     <span class="editTitle" @click="editTitle(index,'secondTitle')">
                         <svg class="icon" aria-hidden="true">
@@ -97,8 +99,9 @@
                 </el-tooltip>
             </h6>
             <p v-if="item.type==='words'"
-               class="wrapper-text">
-                {{pages[index].content}}
+               class="wrapper-text"
+               :style="'font-size: '+item.content.fontSize+'px; line-height: '+(item.content.fontSize+12)+'px; color: '+item.content.color">
+                {{pages[index].content.label}}
                 <el-tooltip v-if="editing" class="item" effect="dark" content="编辑内容" placement="right">
                     <span class="editContent" @click="editTitle(index,'content')">
                         <svg class="icon" aria-hidden="true">
@@ -356,14 +359,27 @@
                 width="300px"
                 center
                 :show-close="false">
-            <el-input v-if="editTitleDialog.action==='content'"
-                      type="textarea"
-                      :autosize="{ minRows: 2, maxRows: 6}"
-                      placeholder="请输入内容"
-                      resize="false"
-                      v-model="editingContent">
-            </el-input>
-            <el-input v-else v-model="editingContent" placeholder="请输入"></el-input>
+            <el-form label-position="top">
+                <el-form-item v-if="editTitleDialog.action==='content'" label="内容：">
+                    <el-input type="textarea"
+                              :autosize="{ minRows: 2, maxRows: 6}"
+                              placeholder="请输入"
+                              resize="false"
+                              v-model="editTitleDialog.editingValue">
+                    </el-input>
+                </el-form-item>
+                <el-form-item v-else :label="(editTitleDialog.action==='title'?'':'二级')+'标题：'">
+                    <el-input v-model="editTitleDialog.editingValue" placeholder="请输入"></el-input>
+                </el-form-item>
+                <el-form-item label="字体大小：">
+                    <el-input v-model="editTitleDialog.fontSize" type="number" placeholder="请输入"></el-input>
+                </el-form-item>
+            </el-form>
+            <el-form label-position="left">
+                <el-form-item label="字体颜色：">
+                    <el-color-picker v-model="editTitleDialog.color"></el-color-picker>
+                </el-form-item>
+            </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editTitleDialogCancel">取 消</el-button>
                 <el-button type="primary" @click="editTitleDialogSubmit">确 定</el-button>
@@ -568,7 +584,14 @@
                     secondTitle: '',
                 },
                 tabDialog: { show: false, action: null, editing: [], imgUrl: ''},
-                editTitleDialog: { show: false, action: null, editing: null,},
+                editTitleDialog: {
+                    show: false,
+                    action: null,
+                    editing: null,
+                    editingValue: '',
+                    fontSize: '',
+                    color: '',
+                },
                 addNavDialog: { show: false, type: ''},
                 resetNavNameDialog: { show: false, editing: null},
                 editingContent: '',
@@ -580,9 +603,21 @@
                 pages: [
                     {
                         type: 'words',
-                        title: '我们是美管加',
-                        secondTitle: '携手带领美业，一步一个脚印，走向未来。',
-                        content: '上海七圣网络科技有限公司（简称美管加）成立于2007年，历经十一年发展，目前成为中国美业全面领先的管理软件提供商。秉承让美业轻松实现互联网化运营的使命，美管加定位为面向美业商户提供极致体验的互联网运营系统和帮助门店全面提升运营能力的增值服务。美管加通过为商户提供一套完整的互联网化运营管理软件，相关硬件产品和增值服务，能让门店轻松实现线上和线下一体化运营。美管加在上海、深圳和武汉三地分别设立运营，营销和研发中心，同时在全国各省市建立了38个销售网点，覆盖国内31个省市和部分海外国家。 美管加在全国已有超过50000家客户，帮助美业商户高效管理近6000万消费者。公司正全方位加速发展，致力于推动中国美业的健康持续发展。',
+                        title: {
+                            label: '我们是美管加',
+                            fontSize: 40,
+                            color: '#3b3b3b',
+                        },
+                        secondTitle: {
+                            label: '携手带领美业，一步一个脚印，走向未来。',
+                            fontSize: 24,
+                            color: '#9b9b9b',
+                        },
+                        content: {
+                            label: '上海七圣网络科技有限公司（简称美管加）成立于2007年，历经十一年发展，目前成为中国美业全面领先的管理软件提供商。秉承让美业轻松实现互联网化运营的使命，美管加定位为面向美业商户提供极致体验的互联网运营系统和帮助门店全面提升运营能力的增值服务。美管加通过为商户提供一套完整的互联网化运营管理软件，相关硬件产品和增值服务，能让门店轻松实现线上和线下一体化运营。美管加在上海、深圳和武汉三地分别设立运营，营销和研发中心，同时在全国各省市建立了38个销售网点，覆盖国内31个省市和部分海外国家。 美管加在全国已有超过50000家客户，帮助美业商户高效管理近6000万消费者。公司正全方位加速发展，致力于推动中国美业的健康持续发展。',
+                            fontSize: 18,
+                            color: '#9d9d9d',
+                        },
                         bg: '#eeeeee',
                     },
                     {
@@ -598,8 +633,16 @@
                     },
                     {
                         type: 'imgTip',
-                        title: '美管加服务',
-                        secondTitle: '一步到位开启美业互联网运营时代',
+                        title: {
+                            label: '美管加服务',
+                            fontSize: 40,
+                            color: '#3b3b3b',
+                        },
+                        secondTitle: {
+                            label: '一步到位开启美业互联网运营时代',
+                            fontSize: 24,
+                            color: '#9d9d9d',
+                        },
                         bg: '#eeeeee',
                         list: [
                             {
@@ -630,8 +673,16 @@
                     },
                     {
                         type: 'wordTip',
-                        title: '美管加版本',
-                        secondTitle: '选择最合适你的',
+                        title: {
+                            label: '美管加版本',
+                            fontSize: 44,
+                            color: '#ffffff',
+                        },
+                        secondTitle: {
+                            label: '选择最合适你的',
+                            fontSize: 16,
+                            color: '#ffffff',
+                        },
                         bg: '#0b0b0b',
                         tips: [
                             {
@@ -660,8 +711,16 @@
                     },
                     {
                         type: 'location',
-                        title: '我们是美管加',
-                        secondTitle: '带领美业，一步一个脚印，走向未来。',
+                        title: {
+                            label: '我们是美管加',
+                            fontSize: 28,
+                            color: '#828282',
+                        },
+                        secondTitle: {
+                            label: '带领美业，一步一个脚印，走向未来。',
+                            fontSize: 12,
+                            color: '#828282',
+                        },
                         bg: '#151515',
                         phone: {
                             text: '0755-28288128',
@@ -942,18 +1001,38 @@
                 editTitle(i,action) {
                     this.editTitleDialog.action = action
                     this.editTitleDialog.editing = i
+                    this.editTitleDialog.editingValue = this.pages[i][action].label
+                    this.editTitleDialog.fontSize = this.pages[i][action].fontSize
+                    this.editTitleDialog.color = this.pages[i][action].color
                     this.editTitleDialog.show = true
-                    this.editingContent = this.pages[i][action]
                 },
                 editTitleDialogSubmit() {
-                    this.pages[this.editTitleDialog.editing][this.editTitleDialog.action] = this.editingContent
-                    this.editingContent = ''
+                    if(this.editTitleDialog.fontSize<12){
+                        alert('字体大小不能小于12')
+                        return
+                    }
+                    if(this.editTitleDialog.fontSize>50){
+                        alert('标题或二级标题字体大小不能大于50')
+                        return
+                    }
+                    if(this.editTitleDialog.fontSize>30&&this.editTitleDialog.action==='content'){
+                        alert('内容字体大小不能大于30')
+                        return
+                    }
+                    if(this.editTitleDialog.action==='title'&&this.editTitleDialog.editingValue.length>12){
+                        alert('标题不能超过12个字符')
+                        return
+                    }
+                    this.pages[this.editTitleDialog.editing][this.editTitleDialog.action].label = this.editTitleDialog.editingValue
+                    this.pages[this.editTitleDialog.editing][this.editTitleDialog.action].fontSize = parseInt(this.editTitleDialog.fontSize)
+                    this.pages[this.editTitleDialog.editing][this.editTitleDialog.action].color = this.editTitleDialog.color
+                    this.editTitleDialog.editingValue = ''
                     this.editTitleDialog.show = false
                     this.showMsg('edit')
                 },
                 editTitleDialogCancel() {
                     this.editTitleDialog.show = false
-                    this.editingContent = ''
+                    this.editTitleDialog.editingValue = ''
                 },
 
                 addNavDialogSubmit() {
