@@ -122,17 +122,11 @@ h1{
 }
 .wrapper-imgList-item-title{
     text-align: center;
-    color: #3b3b3b;
     margin: 10px auto;
-    font-size: 24px;
-    line-height: 30px;
 }
 .wrapper-imgList-item-content{
     text-align: center;
-    color: #898989;
     margin: 10px auto;
-    font-size: 16px;
-    line-height: 20px;
 }
 .wrapper-location-title{
     text-align: center;
@@ -345,8 +339,8 @@ h1{
     text-align: center;
 }
 .avatar {
-    width: 178px;
-    height: 178px;
+    width: 250px;
+    height: 140px;
     display: block;
 }
 .imgTip-edit{

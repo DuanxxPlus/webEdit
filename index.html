@@ -161,8 +161,10 @@
                     <div class="wrapper-imgList-item-img">
                         <img :src="_item.img" alt="">
                     </div>
-                    <h6 class="wrapper-imgList-item-title">{{_item.title}}</h6>
-                    <p class="wrapper-imgList-item-content">{{_item.secondTitle}}</p>
+                    <h6 class="wrapper-imgList-item-title"
+                        :style="'font-size: '+_item.title.fontSize+'px; line-height: '+(_item.title.fontSize+6)+'px; color: '+_item.title.color">{{_item.title.label}}</h6>
+                    <p class="wrapper-imgList-item-content"
+                       :style="'font-size: '+_item.content.fontSize+'px; line-height: '+(_item.content.fontSize+4)+'px; color: '+_item.content.color">{{_item.content.label}}</p>
                     <ul class="imgTip-edit" v-if="editing">
                         <li @click="editImgTip(index,_index,'edit')">
                             <el-tooltip class="item" effect="dark" content="编辑" placement="right">
@@ -172,7 +174,7 @@
                             </el-tooltip>
                         </li>
                         <li style="margin-top: 10px;"
-                            @click="delImgTip(index,_index)"
+                            @click="delImgTip(index,_index,'delete')"
                             v-if="pages[index].list.length>2">
                             <el-tooltip class="item" effect="dark" content="删除" placement="right">
                                 <svg class="icon" aria-hidden="true">
@@ -415,27 +417,53 @@
         <el-dialog
                 title=""
                 :visible="imgTipDialog.show"
-                width="300px"
+                width="600px"
                 center
                 :show-close="false">
-            <el-form label-position="top">
-                <el-form-item label="标题：">
-                    <el-input v-model="imgTipDialog.title" placeholder="请输入"></el-input>
-                </el-form-item>
-                <el-form-item label="二级标题：">
-                    <el-input v-model="imgTipDialog.secondTitle" placeholder="请输入"></el-input>
-                </el-form-item>
-                <el-form-item label="背景图片：（建议尺寸1:1）">
-                    <el-upload
-                            class="avatar-uploader"
-                            action="#"
-                            :show-file-list="false"
-                            :on-success="handleAvatarSuccess"
-                            :before-upload="beforeAvatarUpload">
-                        <img v-if="imgTipDialog.imgUrl" :src="imgTipDialog.imgUrl" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
-                </el-form-item>
+            <el-form label-position="top" :model="imgTipDialog" :rules="imgTipDialog.rules">
+                <el-row :gutter="24">
+                    <el-col :span="12">
+                        <el-form-item label="标题：" prop="title">
+                            <el-input v-model="imgTipDialog.title" placeholder="请输入"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="内容：" prop="content">
+                            <el-input v-model="imgTipDialog.content" placeholder="请输入"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="24">
+                    <el-col :span="12">
+                        <el-form-item label="标题字体大小：" prop="titleFontSize">
+                            <el-input v-model="imgTipDialog.titleFontSize" placeholder="请输入" type="number"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="内容字体大小：" prop="contentFontSize">
+                            <el-input v-model="imgTipDialog.contentFontSize" placeholder="请输入" type="number"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="24">
+                    <el-col :span="12"></el-col>
+                    <el-col :span="12"></el-col>
+                </el-row>
+                <el-row>
+                    <el-col>
+                        <el-form-item label="背景图片：（建议尺寸250*250）">
+                            <el-upload
+                                    class="avatar-uploader"
+                                    action="#"
+                                    :show-file-list="false"
+                                    :on-success="handleAvatarSuccess"
+                                    :before-upload="beforeAvatarUpload">
+                                <img v-if="imgTipDialog.imgUrl" :src="imgTipDialog.imgUrl" class="avatar" style="height: 250px;">
+                                <i v-else class="el-icon-plus avatar-uploader-icon" style="height: 250px;line-height: 250px;"></i>
+                            </el-upload>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="imgTipDialogCancel">取 消</el-button>
@@ -581,7 +609,29 @@
                     editing: [],
                     imgUrl: '',
                     title: '',
-                    secondTitle: '',
+                    titleFontSize: null,
+                    titleColor: '',
+                    content: '',
+                    contentFontSize: null,
+                    contentColor: '',
+                    rules: {
+                        title: [
+                            { required: true, message: '请输入标题', trigger: 'blur' },
+                            { max: 6, message: '标题不能超过6个字符', trigger: 'blur' }
+                        ],
+                        content: [
+                            { required: true, message: '请输入内容', trigger: 'blur' },
+                            { max: 12, message: '内容不能超过12个字符', trigger: 'blur' }
+                        ],
+                        titleFontSize: [
+                            { required: true, message: '请输入标题字体大小', trigger: 'blur' },
+                            { type: 'number', min: 12, max: 30, message: '标题字体大小必须在12-30范围内', trigger: 'blur' }
+                        ],
+                        contentFontSize: [
+                            { required: true, message: '请输入内容字体大小', trigger: 'blur' },
+                            { type: 'number', min: 12, max: 20, message: '内容字体大小必须在12-20范围内', trigger: 'blur' }
+                        ],
+                    },
                 },
                 tabDialog: { show: false, action: null, editing: [], imgUrl: ''},
                 editTitleDialog: {
@@ -647,27 +697,47 @@
                         list: [
                             {
                                 img: './images/mgjxt.png',
-                                isRight: false,
-                                title: '美管加系统',
-                                secondTitle: '美业互联网基础系统',
+                                title: {
+                                    label: '美管加系统',
+                                    fontSize: 24,
+                                },
+                                content: {
+                                    label: '美业互联网基础系统',
+                                    fontSize: 16,
+                                },
                             },
                             {
                                 img: './images/mxe.png',
-                                isRight: false,
-                                title: '美小二',
-                                secondTitle: '美业互联网基础服务',
+                                title: {
+                                    label: '美小二',
+                                    fontSize: 24,
+                                },
+                                content: {
+                                    label: '美业互联网基础服务',
+                                    fontSize: 16,
+                                },
                             },
                             {
                                 img: './images/mzz.png',
-                                isRight: false,
-                                title: '美知知',
-                                secondTitle: '美业互联网基础教育',
+                                title: {
+                                    label: '美知知',
+                                    fontSize: 24,
+                                },
+                                content: {
+                                    label: '美业互联网基础教育',
+                                    fontSize: 16,
+                                },
                             },
                             {
                                 img: './images/myy.png',
-                                isRight: true,
-                                title: '美盈盈',
-                                secondTitle: '美业互联网代运营',
+                                title: {
+                                    label: '美盈盈',
+                                    fontSize: 24,
+                                },
+                                content: {
+                                    label: '美业互联网代运营',
+                                    fontSize: 16,
+                                },
                             }
                         ],
                     },
@@ -734,23 +804,43 @@
                 pageMod: {
                     words: {
                         type: 'words',
-                        title: '标题',
-                        secondTitle: '二级标题',
-                        content: '内容',
+                        title: {
+                            label: '标题',
+                            fontSize: 40,
+                            color: '#3b3b3b',
+                        },
+                        secondTitle: {
+                            label: '二级标题',
+                            fontSize: 24,
+                            color: '#9b9b9b',
+                        },
+                        content: {
+                            label: '内容',
+                            fontSize: 18,
+                            color: '#9b9b9b',
+                        },
                         bg: '#eeeee',
                     },
                     tab: {
                         type: 'tab',
                         tabs: [
                             {name: '标签1', bg: 'white'},
-                            {name: '标签2', bg: 'gray'}
+                            {name: '标签2', bg: 'gray'},
                         ],
                         currentTab: 0,
                     },
                     imgTip: {
                         type: 'imgTip',
-                        title: '标题',
-                        secondTitle: '二级标题',
+                        title: {
+                            label: '标题',
+                            fontSize: 24,
+                            color: '#3b3b3b',
+                        },
+                        content: {
+                            label: '内容',
+                            fontSize: 16,
+                            color: '#9d9d9d',
+                        },
                         bg: '#eeeeee',
                         list: [
                             {
@@ -767,8 +857,16 @@
                     },
                     wordTip: {
                         type: 'wordTip',
-                        title: '标题',
-                        secondTitle: '二级标题',
+                        title: {
+                            label: '标题',
+                            fontSize: 44,
+                            color: '#ffffff',
+                        },
+                        secondTitle: {
+                            label: '二级标题',
+                            fontSize: 16,
+                            color: '#ffffff',
+                        },
                         bg: '#0b0b0b',
                         tips: [
                             {
@@ -797,8 +895,16 @@
                     },
                     location: {
                         type: 'location',
-                        title: '标题',
-                        secondTitle: '二级标题',
+                        title: {
+                            label: '标题',
+                            fontSize: 28,
+                            color: '#828282',
+                        },
+                        secondTitle: {
+                            label: '二级标题',
+                            fontSize: 12,
+                            color: '#828282',
+                        },
                         bg: '#151515',
                         phone: {
                             text: '电话',
@@ -919,40 +1025,64 @@
                 },
 
                 imgTipDialogSubmit() {
-                    if(this.imgTipDialog.title.length>6){
-                        alert('标题不能超过6个字符')
+                    /*if(this.imgTipDialog.titleFontSize<12||this.imgTipDialog.contentFontSize<12){
+                        alert('字体大小不能小于12')
                         return
                     }
-                    else if(this.imgTipDialog.secondTitle.length>12){
-                        alert('二级标题不能超过12个字符')
+                    else if(this.imgTipDialog.titleFontSize>30){
+                        alert('标题字体大小不能大于30')
                         return
                     }
+                    else if(this.imgTipDialog.contentFontSize>20){
+                        alert('内容字体大小不能大于20')
+                        return
+                    }*/
                     const i = this.imgTipDialog.editing[0]
                     if(this.imgTipDialog.action==='edit'){
                         const _i = this.imgTipDialog.editing[1]
-                        this.pages[i].list[_i].title = this.imgTipDialog.title
-                        this.pages[i].list[_i].secondTitle = this.imgTipDialog.secondTitle
+                        this.pages[i].list[_i].title.label = this.imgTipDialog.title
+                        this.pages[i].list[_i].title.fontSize = parseInt(this.imgTipDialog.titleFontSize)
+                        this.pages[i].list[_i].title.color = this.imgTipDialog.titleColor
+                        this.pages[i].list[_i].content.color = this.imgTipDialog.contentColor
+                        this.pages[i].list[_i].content.label = this.imgTipDialog.content
+                        this.pages[i].list[_i].content.fontSize = parseInt(this.imgTipDialog.contentFontSize)
                         this.showMsg('edit')
                     }
                     else{
                         const obj = JSON.parse(JSON.stringify(this.pageMod.imgTip.list[0]))
-                        obj.title = this.imgTipDialog.title
-                        obj.secondTitle = this.imgTipDialog.secondTitle
+                        obj.title.label = this.imgTipDialog.title
+                        obj.title.fontSize = parseInt(this.imgTipDialog.titleFontSize)
+                        obj.title.color = this.imgTipDialog.titleColor
+                        obj.content.color = this.imgTipDialog.contentColor
+                        obj.content.label = this.imgTipDialog.content
+                        obj.content.fontSize = parseInt(this.imgTipDialog.contentFontSize)
                         this.pages[i].list.push(obj)
                         this.showMsg('add')
                     }
                     this.imgTipDialog.show = false
                     this.imgTipDialog.editing = []
                     this.imgTipDialog.title = ''
-                    this.imgTipDialog.secondTitle = ''
+                    this.imgTipDialog.titleFontSize = ''
+                    this.imgTipDialog.contentFontSize = ''
+                    this.imgTipDialog.content = ''
                 },
                 imgTipDialogCancel() {
                     this.imgTipDialog.editing = []
                     this.imgTipDialog.show = false
+                    this.imgTipDialog.title = ''
+                    this.imgTipDialog.content = ''
+                    this.imgTipDialog.titleFontSize = ''
+                    this.imgTipDialog.contentFontSize = ''
                 },
                 editImgTip(i,_i,action) {
                     this.imgTipDialog.editing = [i,_i]
                     this.imgTipDialog.action = action
+                    if(action==='edit'){
+                        this.imgTipDialog.title = this.pages[i].list[_i].title.label
+                        this.imgTipDialog.content = this.pages[i].list[_i].content.label
+                        this.imgTipDialog.titleFontSize = this.pages[i].list[_i].title.fontSize
+                        this.imgTipDialog.contentFontSize = this.pages[i].list[_i].content.fontSize
+                    }
                     this.imgTipDialog.show = true
                 },
                 delImgTip(i,_i) {
