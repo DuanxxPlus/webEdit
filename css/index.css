@@ -1,430 +1,438 @@
 .icon{
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.15em;
-    fill: currentColor;
-    overflow: hidden;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }
 nav{
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    height: 61px;
-    width: 100%;
-    background: rgba(0,0,0,0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  height: 61px;
+  width: 100%;
+  background: rgba(0,0,0,0.7);
 }
 nav>div{
-    max-width: 1300px;
-    margin: auto;
-    height: 100%;
+  max-width: 1300px;
+  margin: auto;
+  height: 100%;
 }
 h1{
-    float: left;
-    width: 300px;
-    height: 100%;
-    background: rgb(121, 119, 119);
+  float: left;
+  width: 300px;
+  height: 100%;
 }
 #nav-menu{
-    max-width: 600px;
-    height: 100%;
-    float: left;
-    margin: auto;
+  max-width: 600px;
+  height: 100%;
+  float: left;
+  margin: auto;
 }
 .wrapper{
-    width: 100%;
-    height: 100vh;
-    font-size: 40px;
-    overflow: hidden;
-    background-size: 100% 100%;
+  width: 100%;
+  height: 100vh;
+  font-size: 40px;
+  overflow: hidden;
+  background-size: 100% 100%;
 }
 .wrapper-words-title{
-    line-height: 60px;
-    text-align: center;
-    margin-top: 50px;
-    font-weight: bold;
+  line-height: 60px;
+  text-align: center;
+  margin-top: 50px;
+  font-weight: bold;
+}
+.hover{
+  border: 1px dashed #999999;
+  box-sizing: border-box;
 }
 .wrapper-text{
-    width: 800px;
-    margin: 30px auto 0;
-    word-break: break-all;
+  width: 800px;
+  margin: 30px auto 0;
+  word-break: break-all;
 }
 .wrapper-words-secondTitle{
-    line-height: 40px;
-    color: #9d9d9d;
-    margin: 20px auto 0;
-    text-align: center;
+  line-height: 40px;
+  color: #9d9d9d;
+  margin: 20px auto 0;
+  text-align: center;
 }
 .wrapper-tab{
-    max-width: 1300px;
-    margin: 30px auto 0;
-    height: 32px;
-    overflow: hidden;
+  max-width: 1300px;
+  margin: 30px auto 0;
+  height: 32px;
+  overflow: hidden;
 }
 .wrapper-tab>ul{
-    float: right;
-    margin-right: 50px;
-    height: 100%;
+  float: right;
+  margin-right: 50px;
+  height: 100%;
 }
 .wrapper-tab>ul>li{
-    float: left;
-    height: 32px;
-    box-sizing: border-box;
-    padding: 0 25px;
-    margin-right: 10px;
-    border: 1px solid #535353;
-    font-size: 15px;
-    color: #adadad;
-    line-height: 32px;
-    cursor: pointer;
+  float: left;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0 25px;
+  margin-right: 10px;
+  border: 1px solid #535353;
+  font-size: 15px;
+  color: #adadad;
+  line-height: 32px;
+  cursor: pointer;
 }
 .wrapper-tab .current-tab{
-    color: white;
-    background: #982ea7;
-    border-color: #982ea7;
+  color: white;
+  background: #982ea7;
+  border-color: #982ea7;
 }
 .wrapper-imgTip-title{
-    line-height: 60px;
-    text-align: center;
-    margin-top: 50px;
-    font-weight: 300;
+  line-height: 60px;
+  text-align: center;
+  margin-top: 50px;
+  font-weight: 300;
 }
 .wrapper-imgTip-secondTitle{
-    line-height: 40px;
-    margin: 20px auto 0;
-    text-align: center;
+  line-height: 40px;
+  margin: 20px auto 0;
+  text-align: center;
 }
 .wrapper-imgList{
-    max-width: 1200px;
-    height: 292px;
-    margin: 50px auto 0;
+  max-width: 1200px;
+  height: 292px;
+  margin: 50px auto 0;
 }
 .wrapper-imgList>li{
-    float: left;
-    margin-right: 130px;
-    width: 200px;
+  float: left;
+  margin-right: 130px;
+  width: 200px;
 }
 .wrapper-imgList>.edit-imgTip{
-    float: none;
-    margin-right: 0;
-    width: 80px;
-    height: 26px;
-    position: absolute;
-    top: 0;
-    right: -80px;
-    z-index: 2;
+  float: none;
+  margin-right: 0;
+  width: 80px;
+  height: 26px;
+  position: absolute;
+  top: 0;
+  right: -80px;
+  z-index: 2;
 }
 .wrapper-imgList>.wrapper-imgList-item-right{
-    margin-right: 0;
+  margin-right: 0;
 }
 .wrapper-imgList-item-img>img{
-    width: 100%;
+  width: 100%;
 }
 .wrapper-imgList-item-title{
-    text-align: center;
-    margin: 10px auto;
+  text-align: center;
+  margin: 10px auto;
 }
 .wrapper-imgList-item-content{
-    text-align: center;
-    margin: 10px auto;
+  text-align: center;
+  margin: 10px auto;
 }
 .wrapper-location-title{
-    text-align: center;
-    line-height: 36px;
-    margin: 150px auto 0;
+  text-align: center;
+  line-height: 36px;
+  margin: 150px auto 0;
 }
 .wrapper-location-secondTitle{
-    text-align: center;
-    line-height: 28px;
-    margin: 10px auto 0;
+  text-align: center;
+  line-height: 28px;
+  margin: 10px auto 0;
 }
 .wrapper-location-content{
-    width: 800px;
-    height: 300px;
-    overflow: hidden;
-    margin: 20px auto 0;
+  width: 800px;
+  height: 300px;
+  overflow: hidden;
+  margin: 20px auto 0;
 }
 .wrapper-location-concat{
-    float: left;
-    width: 50%;
-    height: 100%;
+  float: left;
+  width: 50%;
+  height: 100%;
 }
 .wrapper-location-concat>li{
-    height: 100px;
+  height: 100px;
 }
 .wrapper-location-icon{
-    float: left;
-    color: #7c7c7c;
-    font-size: 40px;
-    background: #2e2e2e;
-    border-radius: 50%;
-    padding: 15px;
+  float: left;
+  color: #7c7c7c;
+  font-size: 40px;
+  background: #2e2e2e;
+  border-radius: 50%;
+  padding: 15px;
 }
 .wrapper-location-concat p{
-    font-size: 28px;
-    line-height: 40px;
-    color: #982ea7;
-    font-weight: bold;
-    float: left;
-    margin-left: 20px;
-    min-width: 220px;
+  font-size: 28px;
+  line-height: 40px;
+  color: #982ea7;
+  font-weight: bold;
+  float: left;
+  margin-left: 20px;
+  min-width: 220px;
 }
 .wrapper-location-concat span{
-    font-size: 14px;
-    line-height: 18px;
-    color: #4b4b4b;
-    float: left;
-    margin: 5px 0 0 20px;
-    min-width: 75px;
+  font-size: 14px;
+  line-height: 18px;
+  color: #4b4b4b;
+  float: left;
+  margin: 5px 0 0 20px;
+  min-width: 75px;
 }
 .wrapper-location-concat .wrapper-location-kf{
-    line-height: 70px;
+  line-height: 70px;
 }
 .wrapper-location-concat img{
-    width: 100px;
-    height: 100px;
-    float: left;
-    margin-left: 20px;
+  width: 100px;
+  height: 100px;
+  float: left;
+  margin-left: 20px;
 }
 #map{
-    width: 300px;
-    height: 300px;
-    float: right;
+  width: 300px;
+  height: 300px;
+  float: right;
 }
 .wrapper-wordTip-title{
-    font-weight: bold;
-    line-height: 52px;
-    margin: 80px auto 0;
-    text-align: center;
+  font-weight: bold;
+  line-height: 52px;
+  margin: 80px auto 0;
+  text-align: center;
 }
 .wrapper-wordTip-secondTitle{
-    line-height: 20px;
-    margin: 20px auto 0;
-    text-align: center;
+  line-height: 20px;
+  margin: 20px auto 0;
+  text-align: center;
 }
 .wrapper-wordTip{
-    margin: 50px auto 0;
-    clear: both;
+  margin: 50px auto 0;
+  clear: both;
 }
 .wrapper-wordTip>li{
-    float: left;
-    width: 265px;
-    margin-right: 45px;
-    border-radius: 10px;
-    padding-bottom: 10px;
+  float: left;
+  width: 265px;
+  margin-right: 45px;
+  border-radius: 10px;
+  padding-bottom: 10px;
 }
 .wrapper-wordTip .wrapper-wordTips-right{
-    margin-right: 0;
+  margin-right: 0;
 }
 .wrapper-wordTips-title{
-    width: 180px;
-    height: 70px;
-    border-radius: 30px;
-    font-size: 16px;
-    line-height: 70px;
-    text-align: center;
-    font-weight: bold;
-    margin: auto;
-    position: relative;
-    top: -35px;
+  width: 180px;
+  height: 70px;
+  border-radius: 30px;
+  font-size: 16px;
+  line-height: 70px;
+  text-align: center;
+  font-weight: bold;
+  margin: auto;
+  position: relative;
+  top: -35px;
 }
 .wrapper-wordTips-lists{
-    padding-top: 5px;
+  padding-top: 5px;
 }
 .wrapper-wordTips-lists>li{
-    margin: 10px 0;
-    text-align: center;
-    font-size: 14px;
-    line-height: 28px;
+  margin: 10px 0;
+  text-align: center;
+  font-size: 14px;
+  line-height: 28px;
 }
 .nav-edit{
-    float: right;
-    margin: 14px 15px 0 0;
+  float: right;
+  margin: 14px 15px 0 0;
+}
+.nav-hover{
+  border: 1px dashed #eeeeee;
 }
 .edit-nav{
-    width: 15px;
-    height: 61px;
-    position: absolute;
-    top: 0;
-    right: 5px;
-    z-index: 2;
-    transition: all 350ms;
-    overflow: hidden;
+  width: 40px;
+  height: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 5px;
+  z-index: 2;
+  transition: all 350ms;
+  overflow: hidden;
 }
 .edit-nav>li{
-    height: 20px;
-    font-size: 14px;
-    line-height: 20px;
-    text-align: center;
-    color: white;
-    transition: all 200ms;
+  float: left;
+  height: 20px;
+  margin-right: 5px;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: white;
+  transition: all 200ms;
 }
 .edit-nav>li:hover{
-    color: #0F7CC5;
+  color: #0F7CC5;
 }
 .ant{
-    margin-top: 15px;
-    width: 100%;
+  margin-top: 15px;
+  width: 100%;
 }
 .emi{
-    padding-right: 28px!important;
+  padding-right: 28px!important;
 }
 .editTitle{
-    right: 20%;
-    top: 50%;
+  right: 20%;
+  top: 50%;
 }
 .editTitle:hover,.editContent:hover{
-    color: #0F7CC5;
+  color: #0F7CC5;
 }
 .editContent{
-    right: -30px;
-    top: 0;
+  right: -30px;
+  top: 0;
 }
 .editTitle,.editContent{
-    transform: translate(0,-50%);
-    font-size: 20px;
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    background: #444444;
-    border: 1px solid black;
-    color: white;
-    cursor: pointer;
-    text-align: center;
-    border-radius: 3px;
-    display: block;
-    position: absolute;
+  transform: translate(0,-50%);
+  font-size: 20px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  background: #444444;
+  border: 1px solid black;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 3px;
+  display: block;
+  position: absolute;
 }
 .edit-tab{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    top: 0;
-    left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  top: 0;
+  left: 0;
 }
 .edit-tab>li{
-    width: 16px;
-    height: 18px;
-    line-height: 18px;
-    font-size: 14px;
-    color: white;
-    margin: 7px 5px 0;
-    background: #666666;
-    border: 1px solid black;
-    border-radius: 3px;
+  width: 16px;
+  height: 18px;
+  line-height: 18px;
+  font-size: 14px;
+  color: white;
+  margin: 7px 5px 0;
+  background: #666666;
+  border: 1px solid black;
+  border-radius: 3px;
 }
 .edit-tab>li:hover{
-    color: #0F7CC5;
+  color: #0F7CC5;
 }
 .wrapper .tab-edit-button{
-    border: none;
+  border: none;
 }
 .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
+  border-color: #409EFF;
 }
 .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 250px;
-    height: 140px;
-    line-height: 140px;
-    text-align: center;
+  font-size: 28px;
+  color: #8c939d;
+  width: 250px;
+  height: 140px;
+  line-height: 140px;
+  text-align: center;
 }
 .avatar {
-    width: 250px;
-    height: 140px;
-    display: block;
+  width: 250px;
+  height: 140px;
+  display: block;
 }
 .imgTip-edit{
-    position: absolute;
-    right: 3px;
-    top: 3px;
-    z-index: 2;
-    width: 17px;
-    height: 50px;
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  z-index: 2;
+  width: 17px;
+  height: 50px;
 }
 .imgTip-edit>li,.wordTips-edit>li{
-    width: 100%;
-    height: 20px;
-    font-size: 14px;
-    line-height: 20px;
-    text-align: center;
-    color: white;
-    background: #666666;
-    border-radius: 3px;
-    cursor: pointer;
+  width: 100%;
+  height: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: white;
+  background: #666666;
+  border-radius: 3px;
+  cursor: pointer;
 }
 .imgTip-edit>li:hover,.wordTips-edit>li:hover{
-    color: #0F7CC5;
+  color: #0F7CC5;
 }
 .wordTips-edit{
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translate(0,-50%);
-    width: 17px;
-    height: 50px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translate(0,-50%);
+  width: 17px;
+  height: 50px;
 }
 .wordTipItem-edit{
-    position: absolute;
-    width: 35px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 14px;
-    right: 5px;
-    top: 50%;
-    transform: translate(0,-50%);
+  position: absolute;
+  width: 35px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
+  right: 5px;
+  top: 50%;
+  transform: translate(0,-50%);
 }
 .wordTipItem-edit>li{
-    width: 15px;
-    height: 20px;
-    font-size: 14px;
-    line-height: 20px;
-    float: left;
-    color: white;
-    background: #666666;
-    border-radius: 3px;
-    cursor: pointer;
+  width: 15px;
+  height: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  float: left;
+  color: white;
+  background: #666666;
+  border-radius: 3px;
+  cursor: pointer;
 }
 .wordTipItem-edit>li:hover{
-    color: #0F7CC5;
+  color: #0F7CC5;
 }
 .wrapper-wordTip .add-wordTip{
-    float: none;
-    width: 80px;
-    position: absolute;
-    top: 0;
-    right: -85px;
-    z-index: 2;
-    margin-right: 0;
+  float: none;
+  width: 80px;
+  position: absolute;
+  top: 0;
+  right: -85px;
+  z-index: 2;
+  margin-right: 0;
 }
 .wrapper-location-concat .editLocation{
-    min-width: 0;
-    display: block;
-    position: absolute;
-    top: 10%;
-    width: 20px;
-    height: 20px;
-    box-sizing: border-box;
-    line-height: 20px;
-    font-size: 16px;
-    text-align: center;
-    right: -20px;
-    z-index: 2;
-    color: white;
-    background: #666666;
-    border: 1px solid black;
-    cursor: pointer;
-    border-radius: 3px;
+  min-width: 0;
+  display: block;
+  position: absolute;
+  top: 10%;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  line-height: 20px;
+  font-size: 16px;
+  text-align: center;
+  right: -20px;
+  z-index: 2;
+  color: white;
+  background: #666666;
+  border: 1px solid black;
+  cursor: pointer;
+  border-radius: 3px;
 }
 .wrapper-location-concat .editLocation:hover{
-    color: #0F7CC5;
+  color: #0F7CC5;
 }
