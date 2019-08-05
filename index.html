@@ -74,12 +74,12 @@
         </el-button>
       </div>
     </nav>
-    <div class="wrapper" id="home" :style="`background: ${home.bg}`">
+    <div class="wrapper" id="home" :style="`background-image: ${home.bg}`">
 
     </div>
     <div class="wrapper"
     v-for="(item,index) in pages"
-    :style="'background: '+ (item.type==='tab'? item.tabs[item.currentTab].bg : item.bg)">
+    :style="'background-'+ (item.type==='tab'? 'image: '+item.tabs[item.currentTab].bg : (item.bgType+': '+item.bg))+';'">
       <h2 v-if="item.type!=='tab'"
         :class="'wrapper-'+item.type+'-title'+(item.title.hover&&editing?' hover':'')"
         :style="'font-size: '+item.title.fontSize+'px; color: '+item.title.color"
@@ -109,7 +109,7 @@
         </el-tooltip>
       </h6>
       <p v-if="item.type==='words'"
-        :class="'wrapper-text'+(item.content.hover&&editing?' hover':'')"
+        :class="'wrapper-text'+(item.content.hover&&editing?' hover2':'')"
         :style="'font-size: '+item.content.fontSize+'px; line-height: '+(item.content.fontSize+12)+'px; color: '+item.content.color"
         @mouseenter="item.content.hover = true"
         @mouseleave="item.content.hover = false">
@@ -124,6 +124,9 @@
       </p>
       <div v-if="item.type==='tab'"
         class="wrapper-tab">
+        <h2 class="wrapper-tab-title">
+          {{item.tabs[item.currentTab].title}}
+        </h2>
         <ul>
           <li v-for="(_item,_index) in pages[index].tabs"
             :class="{'current-tab': pages[index].currentTab===_index}"
@@ -702,15 +705,16 @@
               hover: false,
             },
             bg: '#eeeeee',
+            bgType: 'color',
           },
           {
             type: 'tab',
             tabs: [
-              { name: '美一刻', bg: 'url(./images/myk.png)', hover: false },
-              { name: '生意宝', bg: 'url(./images/syb.png)', hover: false },
-              { name: '无纸化', bg: 'url(./images/wzh.png)', hover: false },
-              { name: '电子轮牌', bg: 'url(./images/dzlp.png)', hover: false },
-              { name: '超级收银', bg: 'url(./images/cjsy.png)', hover: false }
+              { title: '标题', name: '美一刻', bg: 'url(./images/myk.png)', hover: false },
+              { title: '标题', name: '生意宝', bg: 'url(./images/syb.png)', hover: false },
+              { title: '标题', name: '无纸化', bg: 'url(./images/wzh.png)', hover: false },
+              { title: '标题', name: '电子轮牌', bg: 'url(./images/dzlp.png)', hover: false },
+              { title: '标题', name: '超级收银', bg: 'url(./images/cjsy.png)', hover: false }
             ],
             currentTab: 0,
           },
@@ -729,6 +733,7 @@
               hover: false,
             },
             bg: '#eeeeee',
+            bgType: 'color',
             list: [
               {
                 img: './images/mgjxt.png',
@@ -795,6 +800,7 @@
               hover: false,
             },
             bg: '#0b0b0b',
+            bgType: 'color',
             tips: [
               {
                 title: '盛传版',
@@ -837,6 +843,7 @@
               hover: false,
             },
             bg: '#151515',
+            bgType: 'color',
             phone: {
               text: '0755-28288128',
               subText: '周一到周六9:30-21:00，周日9:30-18:30',
@@ -875,6 +882,7 @@
               hover: false,
             },
             bg: '#eeeee',
+            bgType: 'color',
             hover: false,
           },
           tab: {
@@ -900,6 +908,7 @@
               hover: false,
             },
             bg: '#eeeeee',
+            bgType: 'color',
             list: [
               {
                 img: './images/mgjxt.png',
@@ -930,6 +939,7 @@
               hover: false,
             },
             bg: '#0b0b0b',
+            bgType: 'color',
             tips: [
               {
                 title: '标题',
@@ -972,6 +982,7 @@
               hover: false,
             },
             bg: '#151515',
+            bgType: 'color',
             phone: {
               text: '电话',
               subText: '上班时间',
