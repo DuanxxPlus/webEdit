@@ -80,12 +80,11 @@
     <div class="wrapper"
     v-for="(item,index) in pages"
     :style="'background-'+ (item.type==='tab'? 'image: '+item.tabs[item.currentTab].bg : (item.bgType+': '+item.bg))+';'">
-      <h2 v-if="item.type!=='tab'"
-        :class="'wrapper-'+item.type+'-title'+(item.title.hover&&editing?' hover':'')"
+      <h2 :class="'wrapper-'+item.type+'-title'+(item.title.hover&&editing?' hover':'')"
         :style="'font-size: '+item.title.fontSize+'px; color: '+item.title.color"
         @mouseenter="item.title.hover = true"
         @mouseleave="item.title.hover = false">
-        {{item.title.label}}
+        {{ item.type==='tab' ? item.tabs[item.currentTab].title : item.title.label }}
         <el-tooltip v-if="editing && item.title.hover" class="item" effect="dark" content="编辑标题" placement="right">
           <span class="editTitle" @click="editTitle(index,'title')">
             <svg class="icon" aria-hidden="true">
@@ -124,9 +123,6 @@
       </p>
       <div v-if="item.type==='tab'"
         class="wrapper-tab">
-        <h2 class="wrapper-tab-title">
-          {{item.tabs[item.currentTab].title}}
-        </h2>
         <ul>
           <li v-for="(_item,_index) in pages[index].tabs"
             :class="{'current-tab': pages[index].currentTab===_index}"
@@ -709,6 +705,10 @@
           },
           {
             type: 'tab',
+            title: {
+              color: 'gray',
+              hover: false,
+            },
             tabs: [
               { title: '标题', name: '美一刻', bg: 'url(./images/myk.png)', hover: false },
               { title: '标题', name: '生意宝', bg: 'url(./images/syb.png)', hover: false },
